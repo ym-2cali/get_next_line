@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char    *buffer_to_line(char *line, int fd)
 {
@@ -29,17 +29,17 @@ char    *buffer_to_line(char *line, int fd)
 }
 char    *get_next_line(int fd)
 {
-    static char    *str;
+    static char    *str[OPEN_MAX];
     char           *line;
 
     line = NULL;
     if ((fd < 0 || fd >= OPEN_MAX) || BUFFER_SIZE <= 0)
         return (NULL);
-    str = buffer_to_line(str, fd);
-    if (!str)
+    str[fd] = buffer_to_line(str[fd], fd);
+    if (!str[fd])
         return (NULL);
-    line = get_lines(str);
-    str = buffer_left(str);
+    line = get_lines(str[fd]);
+    str[fd] = buffer_left(str[fd]);
     return (line);
 }
 // // void    ft()
